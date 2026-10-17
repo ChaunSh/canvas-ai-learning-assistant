@@ -1,0 +1,84 @@
+[package]
+name = "canvas-ai-assistant"
+version = "0.1.0"
+description = "Canvas AI Learning Assistant"
+authors = ["Canvas AI Learning Assistant contributors"]
+edition = "2021"
+rust-version = "1.88"
+
+[lib]
+# `staticlib`/`cdylib` are required for the Android build; `rlib` is used by tests.
+name = "canvas_ai_assistant_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tauri-plugin-opener = "2"
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+chrono = { version = "0.4", features = ["serde"] }
+chrono-tz = "0.10"
+uuid = { version = "1", features = ["v4", "serde"] }
+rusqlite = { version = "0.40", features = ["bundled", "blob"] }
+
+reqwest = { version = "0.13", default-features = false, features = [
+    "json",
+    "stream",
+    "http2",
+    # rustls with the *ring* provider: aws-lc-rs needs CMake/NASM, which are not
+    # available here and are awkward to supply for the Android NDK build.
+    # The provider is installed once at startup (see `security::tls`).
+    "rustls-no-provider",
+    "webpki-roots",
+] }
+rustls = { version = "0.23", default-features = false, features = [
+    "ring",
+    "std",
+    "tls12",
+    "logging",
+] }
+tokio = { version = "1", features = ["rt-multi-thread", "sync", "time", "macros", "io-util"] }
+tokio-util = { version = "0.7", features = ["rt"] }
+futures-util = "0.3"
+bytes = "1"
+
+parking_lot = "0.12"
+once_cell = "1"
+regex = "1"
+sha2 = "0.11"
+base64 = "0.23"
+zip = { version = "9", default-features = false, features = ["deflate"] }
+quick-xml = "0.42"
+lopdf = "0.45"
+url = "2"
+percent-encoding = "2"
+unicode-segmentation = "1"
+mime_guess = "2"
+tempfile = "3"
+
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+dirs = "7"
+
+[target.'cfg(target_os = "android")'.dependencies]
+jni = "0.19"
+ndk-context = "0.1"
+
+[features]
+# Tauri's default feature set includes the custom-protocol handler used by
+# `tauri build`; keep it enabled for packaged binaries.
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true

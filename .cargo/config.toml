@@ -1,0 +1,12 @@
+# Cargo configuration shared by every developer and CI run.
+#
+# Note: linker paths live in scripts/env.ps1 (machine-specific), not here.
+
+[target.x86_64-pc-windows-gnu]
+# The crate declares `cdylib` because the Android build needs `lib<name>.so`.
+# On Windows the desktop binary links the `rlib`, so the DLL is unused — but
+# MinGW's PE linker still builds a full export table for it and fails with
+# "export ordinal too large" once a Tauri app pulls in enough symbols.
+# Suppressing the export table keeps the DLL linkable and changes nothing about
+# the shipped .exe.
+rustflags = ["-C", "link-arg=-Wl,--exclude-all-symbols"]

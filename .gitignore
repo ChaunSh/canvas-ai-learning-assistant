@@ -1,0 +1,55 @@
+# Node / frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Rust / Tauri
+src-tauri/target/
+src-tauri/gen/schemas/
+target/
+
+# Android generated build outputs (the Gradle project itself IS committed so the
+# Keystore helper in gen/android/app/src can be reviewed and built).
+src-tauri/gen/android/.gradle/
+src-tauri/gen/android/.idea/
+src-tauri/gen/android/build/
+src-tauri/gen/android/app/build/
+src-tauri/gen/android/local.properties
+src-tauri/gen/android/app/src/main/jniLibs/
+*.jks
+*.keystore
+keystore.properties
+src-tauri/gen/android/key.properties
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs & temp
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+coverage/
+.vitest/
+
+# Local build artifacts (produced by scripts/, not committed)
+artifacts/
+*.pdb
+
+# LaTeX intermediates (fixtures keep only .tex + .pdf)
+fixtures/**/*.aux
+fixtures/**/*.log
+fixtures/**/*.out
+fixtures/**/*.toc
+
+# Local secrets / temporary investigation output
+.env
+.env.*
+!.env.example
+/tmp/
